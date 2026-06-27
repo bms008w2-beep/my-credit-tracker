@@ -1,75 +1,41 @@
 import streamlit as st
 
-# 設定: 画面を広々と使う
 st.set_page_config(page_title="Dashboard", layout="wide")
 
-# CSS: 画面全体を固定し、スクロールを無効化
+# CSS: スクロールを消し、カードの角丸や透明度を調整
 st.markdown("""
     <style>
-    /* 全体を固定してスクロールを出さない */
-    .block-container { max-width: 95% !important; padding-top: 20px !important; }
+    .stApp { background-color: #FDFBF7; }
     
-    /* コンテナの親要素 */
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr; /* 左(土木)を大きく */
-        gap: 20px;
-        height: 85vh; /* 画面内に収める */
+    /* カードのスタイル: 高さを揃えるための設定 */
+    .card { 
+        background: transparent; 
+        border: 1px solid rgba(200, 200, 200, 0.3); 
+        border-radius: 40px; 
+        padding: 30px; 
+        margin-bottom: 20px;
     }
-
-    /* 各カードの共通スタイル */
-    .card {
-        background-color: transparent;
-        border: 1px solid rgba(200, 200, 200, 0.3);
-        border-radius: 40px;
-        padding: 30px;
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto; /* 中身が増えたらここだけでスクロール */
-    }
-
-    /* 右側の列（東アジアとWishlist）を縦に並べる設定 */
-    .right-stack {
-        display: grid;
-        grid-template-rows: 1fr 1fr;
-        gap: 20px;
-    }
-
     .major-title { font-weight: bold; font-size: 1.2rem; margin-bottom: 15px; color: #444; }
-    
-    /* ボタンの枠と背景を完全消去 */
-    div.stButton > button {
-        background-color: transparent !important;
-        border: none !important;
-        color: #444 !important;
-        font-size: 2rem !important;
-        padding: 0 !important;
-        box-shadow: none !important;
-    }
     </style>
 """, unsafe_allow_html=True)
 
-# --- レイアウト構築 ---
-st.markdown('<div class="dashboard-grid">', unsafe_allow_html=True)
+# 左右の列を作成（1:1の比率）
+col1, col2 = st.columns([1, 1])
 
-# 1. 土木 (2倍の高さ/広さ)
-st.markdown('''
-    <div class="card">
-        <div class="major-title">Civil Engineering</div>
-''', unsafe_allow_html=True)
-if st.button("+"): st.session_state.show_add = True
-st.markdown('</div>', unsafe_allow_html=True)
+with col1:
+    # 土木のカード（高さを大きく確保）
+    st.markdown('<div class="card" style="height: 70vh;">', unsafe_allow_html=True)
+    st.markdown('<div class="major-title">Civil Engineering</div>', unsafe_allow_html=True)
+    if st.button("+", key="civil_btn"): st.session_state.show_add = True
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# 2. 中央メーター
-st.markdown('''
-    <div class="card" style="justify-content:center; align-items:center;">
-        </div>
-''', unsafe_allow_html=True)
-
-# 3. 右側 (東アジア + Wishlist)
-st.markdown('<div class="right-stack">', unsafe_allow_html=True)
-st.markdown('<div class="card"><div class="major-title">East Asian Studies</div></div>', unsafe_allow_html=True)
-st.markdown('<div class="card"><div class="major-title">Wishlist</div></div>', unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
+with col2:
+    # 東アジア（上段）
+    st.markdown('<div class="card" style="height: 33vh;">', unsafe_allow_html=True)
+    st.markdown('<div class="major-title">East Asian Studies</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Wishlist（下段）
+    st.markdown('<div class="card" style="height: 33vh;">', unsafe_allow_html=True)
+    st.markdown('<div class="major-title">Wishlist</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
